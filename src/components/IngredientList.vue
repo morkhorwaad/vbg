@@ -1,0 +1,46 @@
+<template>
+  <section class="ingredient-list-container">
+    <header>
+      <h1>{{ name }}</h1>
+    </header>
+    <div class="ingredient-list">
+      <Ingredient
+        v-for="(item, index) in ingredients"
+        v-bind:index="index"
+        v-bind:name="item.name"
+        v-bind:calorieCount="item.calorieCount"
+        v-bind:key="item.id"
+      ></Ingredient>
+    </div>
+  </section>
+</template>
+
+<script>
+import Ingredient from "./Ingredient.vue";
+
+export default {
+    name: 'IngredientList',
+    props: {
+        name: String, 
+        ingredients: Array
+    }, 
+    components: {
+        Ingredient
+    }
+}
+</script>
+
+<style>
+.ingredient-list-container {
+  margin-bottom: 5vh;
+}
+.ingredient-list {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+}
+header {
+  grid-column: 1/-1;
+}
+</style>
+
