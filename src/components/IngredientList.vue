@@ -7,8 +7,8 @@
       <Ingredient
         v-for="(item, index) in ingredients"
         v-bind:index="index"
-        v-bind:name="item.name"
-        v-bind:calorieCount="item.calorieCount"
+        v-bind:name="item.ingredientName"
+        v-bind:foodId="item.foodId"
         v-bind:key="item.id"
       ></Ingredient>
     </div>

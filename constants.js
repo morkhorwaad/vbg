@@ -1,25 +1,25 @@
 const baseStarter = [
     "brown rice",
-    "quinoa",
-    "couscous"
+    // "quinoa",
+    // "couscous"
 ];
 
 const proteinStarter = [
-    "glvvsspa",
-    "tempeh",
-    "black beans"
+    "tofu",
+    // "tempeh",
+    // "black beans"
 ]
 
 const veggieStarter = [
     "green kale",
-    "sweet potato",
-    "asparagus"
+    // "sweet potato",
+    // "asparagus"
 ]
 
 const dressingStarter = [
     "tahini",
-    "olive oil",
-    "avocado"
+    // "olive oil",
+    // "avocado"
 ]
 
 export const ingredientCategories = {
