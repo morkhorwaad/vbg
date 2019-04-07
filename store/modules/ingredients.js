@@ -21,17 +21,15 @@ const actions = {
     Object.values(ingredientCategories).forEach(category => {
       edamam.getParsedIngredientInfo(category.starter, ingredients => {
         commit('addInitialIngredients', {type: category.name, ingredients})
-        dispatch('getNutrientData', ingredients)
+        dispatch('getNutrientData', { category: category.name, ingredients })
       })
     })
   },
 
-  getNutrientData({commit}, ingredients) {
-    Object.values(ingredientCategories).forEach(category => {
+  getNutrientData({commit}, { category, ingredients }) {
       edamam.getNutritionInfo(
         ingredients.map(i => i.foodId), 
-        info => commit('addNutritionInfo', {type: category.name, info }))
-    });
+        info => commit('addNutritionInfo', {type: category, info }))
   }
 }
 
