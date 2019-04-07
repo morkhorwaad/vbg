@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 const foodDbEndpoint = "https://api.edamam.com/api/food-database/"
 const parserEndpoint = foodDbEndpoint + "parser?categoryLabel=food&category=generic-foods&health=vegan"
 const nutrientsEndpoint = foodDbEndpoint + "nutrients"
@@ -20,34 +18,40 @@ const nutritionCreds = {
 }
 const nutritionStr = makeCredString(nutritionCreds.id, nutritionCreds.key)
 
-const stripParsedResults = (resultList) => {
-    return resultList.reduce((acc, res) => {
-        if(res.data.parsed.length > 0) {
-            acc.push({ ingredientName: res.data.text, foodId: res.data.parsed[0].food.foodId })
-        }
-        return acc;
-    }, [])
-}
-
 export default {
     getParsedIngredientInfo(ingrList, cb) {
-        const encodedList = ingrList.map(encodeURI);
-        const urls = encodedList.map(e => `${parserEndpoint}&ingr=${e}&${foodDbAuthStr}`);
-        const gets = urls.map(u => axios.get(u));
-        return axios.all(gets)
-            .then(stripParsedResults)
+        const gets = ingrList.map(ingr => {
+            const url = encodeURI(`${parserEndpoint}&ingr=${ingr.name}&${foodDbAuthStr}`)
+            return fetch(url, {
+                method: 'get'
+            })
+            .then(response => response.json())
+            .then(json => Object.assign(json, { category: ingr.category }))
+        })
+
+        const successFilter = r => r.parsed.length > 0
+        const stripFields = d => {
+            return {
+                ingredientName: d.text, 
+                foodId: d.parsed[0].food.foodId, 
+                category: d.category
+            }
+        }
+        return Promise.all(gets)
+            .then(data => data.filter(successFilter))
+            .then(data => data.map(stripFields))
             .then(cb)
-            .catch(e => console.error("There was a network error: " + e))
+            .catch(err => console.log("There was a network error: ", err))
     }, 
 
-    getNutritionInfo(foodIdList, cb) {
-        const gets = foodIdList.map(foodId => {
+    getNutritionInfo(ingrList, cb) {
+        const gets = ingrList.map(ingr => {
             const params = { 
                 ingredients: [
                     {
                         quantity: 1, 
                         measureURI: cupMeasureUri,
-                        foodId
+                        foodId: ingr.foodId
                     }
                 ]
             };
@@ -62,11 +66,9 @@ export default {
                 body: JSON.stringify(params)
             })
             .then(response => response.json())
-            .then(json => Object.assign(json, { foodId }))
+            .then(json => Object.assign(json, ingr))
         })
-        // const urls = ingrList.map(e => `${nutrientsEndpoint}?quantity=1&foodId=${e.foodId}${foodDbAuthStr}&measureURI=${cupMeasureUri}`);
-        // const encodedUrls = urls.map(encodeURI);
-        // const gets = encodedUrls.map(axios.get);
+
         return Promise.all(gets)
             .then(cb)
             .catch(e => console.error("There was a network error: " + e))

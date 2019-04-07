@@ -1,52 +1,59 @@
 import edamam from '../../api/edamam.js'
-import { ingredientCategories } from '../../constants.js'
+import { INGREDIENT_CATEGORIES, STARTING_INGREDIENTS } from '../../constants.js'
 
 const state = {
-  Base: [], 
-  Veggies: [], 
-  Protein: [], 
-  Dressing: []
+  ingredients: []
 }
 
 const getters = {
-  getIngredientDisplayInfoByType: state => type => {
-    return state[type].map(i => {
-      return { ingredientName: i.ingredientName, foodId: i.foodId }
-    })
+  getIngredientsByCategory: state => category => {
+    return getIngredientsInCategory(state.ingredients, category)
+  }, 
+
+  ingredientCategoryLists: state => {
+    return INGREDIENT_CATEGORIES.reduce(
+      (acc, cur) => {
+        const ingrList = getIngredientsInCategory(state.ingredients, cur);
+        acc.push({ name: cur, ingredients: ingrList});
+        return acc;
+      }, 
+      []
+    )
   }
 }
 
+function getIngredientsInCategory(ingredients, category) {
+  return ingredients.reduce(
+    (acc, cur) => {
+      if(cur.category == category) { acc.push(cur) }
+      return acc;
+    },
+    []
+  )
+} 
+
 const actions = {
   getInitialIngredients({commit, dispatch}) {
-    Object.values(ingredientCategories).forEach(category => {
-      edamam.getParsedIngredientInfo(category.starter, ingredients => {
-        commit('addInitialIngredients', {type: category.name, ingredients})
-        dispatch('getNutrientData', { category: category.name, ingredients })
-      })
-    })
+      edamam.getParsedIngredientInfo(
+        STARTING_INGREDIENTS,
+        ingredients => {
+          commit('setInitialIngredients', ingredients)
+          dispatch('getNutrientData', ingredients)
+        }
+      )
   },
 
-  getNutrientData({commit}, { category, ingredients }) {
-      edamam.getNutritionInfo(
-        ingredients.map(i => i.foodId), 
-        info => commit('addNutritionInfo', {type: category, info }))
+  getNutrientData({commit}, ingredients) {
+    edamam.getNutritionInfo(
+      ingredients, 
+      info => commit('setInitialIngredients', info)
+    )
   }
 }
 
 const mutations = {
-  addInitialIngredients(state, payload) {
-    if(!payload.type) return;
-    state[payload.type] = [ ...state[payload.type], ...payload.ingredients]
-  }, 
-
-  addNutritionInfo(state, payload) {
-    // for each of the returned nutrition objects, put it in the state
-    payload.info.forEach(n => {
-      const ingrIdx = state[payload.type].findIndex(i => i.foodId == n.foodId)
-      if(ingrIdx < 0) return;
-      const newIngr = Object.assign(state[payload.type][ingrIdx], n)
-      state[payload.type].splice(ingrIdx, 1, newIngr)
-    })
+  setInitialIngredients(state, payload) {
+    state.ingredients = payload
   }
 }
 

@@ -1,8 +1,8 @@
 <template>
     <div class="ingredient">
-        <b> {{ name }} </b>
-        <!-- <i> Calories: {{ ingredient.nutrients.ENERC_KCAL }}</i>
-        <i> Carbs: {{ ingredient.nutrients.CHOCDF }}</i>
+        <b> {{ ingredientInfo.ingredientName }} </b>
+        <i> Calories: {{ calories }}</i>
+        <!-- <i> Carbs: {{ ingredient.nutrients.CHOCDF }}</i>
         <i> Fat: {{ ingredient.nutrients.FAT }}</i>
         <i> Protein: {{ ingredient.nutrients.PROCNT }}</i> -->
         <button>Add to bowl</button>
@@ -13,10 +13,15 @@
 export default {
     name: 'Ingredient',
     props: {
-        name: String, 
-        foodId: String
+        ingredientInfo: Object
     }, 
-
+    computed: {
+        calories() {
+            return this.ingredientInfo.totalNutrients == undefined
+                ? 0
+                : this.ingredientInfo.totalNutrients.ENERC_KCAL.quantity
+        }
+    }
 }
 </script>
 

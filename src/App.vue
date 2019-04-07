@@ -12,19 +12,19 @@
 
 <script>
 import IngredientList from "./components/IngredientList.vue"
-import { mapState, mapActions } from 'vuex'
+import { INGREDIENT_CATEGORIES } from "../constants.js"
+import { mapGetters } from 'vuex'
 
 export default {
   name: "app",
   components: {
     IngredientList
   }, 
-  computed: mapState({
-    ingredientCategories: state => 
-      Object.keys(state.ingredients).map(k => {
-        return {name: k, ingredients: state.ingredients[k]}
-      })
-  }),
+  computed: {
+    ...mapGetters({
+      ingredientCategories: 'ingredients/ingredientCategoryLists'
+    })
+  },
   created() {
     this.$store.dispatch('ingredients/getInitialIngredients')
   }
