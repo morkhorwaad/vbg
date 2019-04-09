@@ -1,25 +1,29 @@
-import edamam from '../../api/edamam.js'
-import { INGREDIENT_CATEGORIES, STARTING_INGREDIENTS } from '../../constants.js'
+import Vue from 'vue';
+import edamam from '../../api/edamam.js';
+import { INGREDIENT_CATEGORIES, STARTING_INGREDIENTS } from '../../constants.js';
 
 const state = {
-  ingredients: []
+  labels: [],
+  nutritionInfo: {}
 }
 
 const getters = {
   getIngredientsByCategory: state => category => {
-    return getIngredientsInCategory(state.ingredients, category)
+    return getIngredientsInCategory(state.labels, category)
   }, 
 
   ingredientCategoryLists: state => {
     return INGREDIENT_CATEGORIES.reduce(
       (acc, cur) => {
-        const ingrList = getIngredientsInCategory(state.ingredients, cur);
+        const ingrList = getIngredientsInCategory(state.labels, cur);
         acc.push({ name: cur, ingredients: ingrList});
         return acc;
       }, 
       []
     )
-  }
+  }, 
+
+  nutrientsByFoodId: state => foodId => state.nutritionInfo[foodId]
 }
 
 function getIngredientsInCategory(ingredients, category) {
@@ -46,14 +50,21 @@ const actions = {
   getNutrientData({commit}, ingredients) {
     edamam.getNutritionInfo(
       ingredients, 
-      info => commit('setInitialIngredients', info)
+      info => commit('addNutritionInfo', info)
     )
   }
 }
 
 const mutations = {
   setInitialIngredients(state, payload) {
-    state.ingredients = payload
+    state.labels = payload
+  },
+
+  addNutritionInfo(state, payload) {
+    payload.forEach(n => {
+      const { foodId, ingredientName, ...nutritionInfo } = n
+      Vue.set(state.nutritionInfo, n.foodId, nutritionInfo)
+    })
   }
 }
 
