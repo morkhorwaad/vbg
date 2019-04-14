@@ -31,3 +31,15 @@ export const STARTING_INGREDIENTS = [
     // { name: "olive oil", category: DRESSING_TAG },
     // { name: "avocado", category: DRESSING_TAG },
 ];
+
+const CALORIE_FIELD = "ENERC_KCAL"
+const PROTEIN_FIELD = "PROCNT"
+const CARB_FIELD = "CHOCDF"
+const FAT_FIELD = "FAT"
+
+export const NUTRITION_FIELDS = {
+    CALORIES: { field: CALORIE_FIELD, name: "calories" },
+    PROTEIN: { field: PROTEIN_FIELD, name: "protein" }, 
+    CARBS: { field: CARB_FIELD, name: "carbs" },
+    FAT: { field: FAT_FIELD, name: "fat" }
+}

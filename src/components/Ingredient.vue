@@ -5,19 +5,13 @@
         <i>{{ carbString }} carbs</i>
         <i>{{ fatString }} fat</i>
         <i>{{ proteinString }} protein</i>
-        <button>Add to bowl</button>
+        <button @click="addToBowl({foodId, name, category})">Add to bowl</button>
     </div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-
-function getNutrientLabel(nutrients, field) {
-    if(nutrients == undefined || nutrients.totalNutrients == undefined)
-        return 0;
-    
-    return `${parseInt(nutrients.totalNutrients[field].quantity)}${nutrients.totalNutrients[field].unit}`
-}
+import { mapState, mapActions } from 'vuex'
+import { getNutrientLabel } from '../../common.js'
 
 export default {
     name: 'Ingredient',
@@ -37,7 +31,10 @@ export default {
         carbString() { return getNutrientLabel(this.nutrients, "CHOCDF") },
         fatString() { return getNutrientLabel(this.nutrients, "FAT") },
         proteinString() { return getNutrientLabel(this.nutrients, "PROCNT") },
-    }
+    }, 
+    methods: mapActions('bowl', [
+        'addToBowl'
+    ])
 }
 </script>
 

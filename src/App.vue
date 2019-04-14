@@ -7,18 +7,21 @@
       v-bind:ingredients="item.ingredients"
       v-bind:key="`ingredientlist-${index}`"
     ></IngredientList>
+    <Bowl />
   </div>
 </template>
 
 <script>
 import IngredientList from "./components/IngredientList.vue"
+import Bowl from './components/Bowl.vue'
 import { INGREDIENT_CATEGORIES } from "../constants.js"
 import { mapGetters } from 'vuex'
 
 export default {
   name: "app",
   components: {
-    IngredientList
+    IngredientList, 
+    Bowl
   }, 
   computed: {
     ...mapGetters({
