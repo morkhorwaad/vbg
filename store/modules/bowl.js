@@ -3,7 +3,7 @@ import { getNutrientQuantity } from '../../common.js'
 
 const state = {
   contents: []
-  // { foodId: ddd, measure: xxxx, category: yyy, quantity: 2}
+  // { foodId: ddd, measure: xxxx, category: yyy, quantity: 2, name: zzz}
 }
 
 const getters = {
@@ -22,6 +22,21 @@ const getters = {
     return nutrients;
     // calculate nutrition quantity based on measure
     // aggregate
+  }, 
+
+  categories(state) {
+    const bowlIngrByCategory = state.contents.reduce(
+      (acc, cur) => {
+        if(!acc[cur.category]) {
+          acc[cur.category] = []
+        }
+        acc[cur.category].push(cur)
+        return acc;
+      },
+      {}
+    )
+
+    return bowlIngrByCategory;
   }
 }
 
@@ -37,15 +52,30 @@ const actions = {
   }
 }
 
+const EqualsIdAndCat = (foodId, category) => c => c.foodId == foodId && c.category == category;
+
 const mutations = {
-  incrementIngredientCount(state, { foodId }) {
-    var toInc = state.contents.find(c => c.foodId == foodId)
-    toInc.quantity++
+  incrementIngredientCount(state, { category, foodId }) {
+    var toInc = state.contents.find(EqualsIdAndCat(foodId, category))
+    if(toInc) {
+      toInc.quantity++
+    }
   }, 
 
-  // I kinda don't like that these are bundled, but at the same time, 
-  // there should never be a state where there is a foodId in contents
-  // that doesn't have any measures attached to it. 
+  decrementIngredientCount(state, { category, foodId }) {
+    var toDecIdx = state.contents.findIndex(EqualsIdAndCat(foodId, category))
+    if(toDecIdx < 0) return;
+
+    var toDec = state.contents[toDecIdx]
+
+    if(toDec.quantity == 1) {
+      state.contents.splice(toDecIdx, 1)
+    }
+    else {
+      toDec.quantity--
+    }
+  },
+
   addIngredient(state, { foodId, category, name }) {
     const newIngr = {
       foodId, 

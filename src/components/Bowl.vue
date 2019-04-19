@@ -4,13 +4,13 @@
             <h1>Current Bowl:</h1>
         </header>
 
-        <BowlItem
-            v-for="(item, index) in bowlContents"
+        <BowlCategory
+            v-for="(item, index) in categories"
             v-bind:index="index"
-            v-bind:name="item.name"
-            v-bind:quantity="item.quantity"
+            v-bind:categoryName="item.name"
+            v-bind:categoryContents="item.contents"
             v-bind:key="item.id"
-      ></BowlItem>
+      ></BowlCategory>
 
       <h2>Totals:</h2>
       <p>Calories: {{ totalCalories }} </p>
@@ -22,13 +22,13 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import BowlItem from './BowlItem'
+import BowlCategory from './BowlCategory'
 import { NUTRITION_FIELDS } from '../../constants.js'
 
 export default {
     name: 'Bowl', 
     components: {
-        BowlItem
+        BowlCategory
     },
     data() {
         return {
@@ -40,8 +40,16 @@ export default {
             bowlContents: state => state.bowl.contents
         }), 
         ...mapGetters({
-            totalNutrients: 'bowl/totalNutrients'
+            totalNutrients: 'bowl/totalNutrients', 
+            bowlCategories: 'bowl/categories'
         }), 
+        categories() {
+            return this.bowlCategories == undefined || this.bowlCategories == {}
+                ? []
+                : Object.keys(this.bowlCategories).map(c => {
+                    return { name: c, contents: this.bowlCategories[c] }
+                })
+        },
         totalCalories() {
             return parseInt(this.totalNutrients[this.NUTRITION_FIELDS.CALORIES.name]);
         }
