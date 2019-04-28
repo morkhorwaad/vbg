@@ -1,5 +1,5 @@
 import Vue from 'vue';
-import edamam from '../../api/edamam.js';
+import requester from '../requester'
 import { INGREDIENT_CATEGORIES, STARTING_INGREDIENTS } from '../../constants.js';
 
 const state = {
@@ -38,7 +38,7 @@ function getIngredientsInCategory(ingredients, category) {
 
 const actions = {
   getInitialIngredients({commit, dispatch}) {
-      edamam.getParsedIngredientInfo(
+      requester.getFoodIds(
         STARTING_INGREDIENTS,
         ingredients => {
           commit('setInitialIngredients', ingredients)
@@ -48,7 +48,7 @@ const actions = {
   },
 
   getNutrientData({commit}, ingredients) {
-    edamam.getNutritionInfo(
+    requester.getNutritionInfo(
       ingredients, 
       info => commit('addNutritionInfo', info)
     )

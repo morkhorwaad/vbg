@@ -1,3 +1,5 @@
+const fetch = require('node-fetch')
+
 const foodDbEndpoint = "https://api.edamam.com/api/food-database/"
 const parserEndpoint = foodDbEndpoint + "parser?categoryLabel=food&category=generic-foods&health=vegan"
 const nutrientsEndpoint = foodDbEndpoint + "nutrients"
@@ -7,18 +9,23 @@ const cupMeasureUri = "http://www.edamam.com/ontologies/edamam.owl#Measure_cup"
 
 const makeCredString = (id, key) => `app_id=${id}&app_key=${key}`
 const foodDbCreds = {
-    id: "d9d9413d",
-    key: "2783f0f67bde39d661baa1a3508995dd"
+    id: process.env.FOOD_DB_AUTH_ID,
+    key: process.env.FOOD_DB_AUTH_KEY
 }
 const foodDbAuthStr = makeCredString(foodDbCreds.id, foodDbCreds.key)
 
 const nutritionCreds = {
-    id: "8678f85d",
-    key: "cb6d8d2b46927f697cb27f63c135e5c3"
+    id: process.env.NUTRITION_DB_AUTH_ID,
+    key: process.env.NUTRITION_DB_AUTH_KEY
 }
 const nutritionStr = makeCredString(nutritionCreds.id, nutritionCreds.key)
 
-export default {
+module.exports = {
+    /**
+     * Retrieves edamam FOODIDs from a list of ingredient names (and categories)
+     * @param {*} ingrList A list of ingredients - should have fields 'name' and 'category'
+     * @param {*} cb Callback to execute
+     */
     getParsedIngredientInfo(ingrList, cb) {
         const gets = ingrList.map(ingr => {
             const url = encodeURI(`${parserEndpoint}&ingr=${ingr.name}&${foodDbAuthStr}`)
@@ -44,6 +51,11 @@ export default {
             .catch(err => console.log("There was a network error: ", err))
     }, 
 
+    /**
+     * From a list of foodids retrieves all nutrition information
+     * @param {*} ingrList list of foodId strings
+     * @param {*} cb callback to execute
+     */
     getNutritionInfo(ingrList, cb) {
         const gets = ingrList.map(ingr => {
             const params = { 
