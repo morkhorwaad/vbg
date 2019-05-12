@@ -2,7 +2,7 @@
     <div>
         <p> {{ name }} </p>
         <p> {{ quantity }} </p>
-        <div class="row">
+        <div class="row center">
             <button v-on:click="increment">add</button>
             <button v-on:click="decrement">remove</button>
         </div>
@@ -41,5 +41,8 @@ export default {
     .row {
         display: flex;
         flex-flow: row nowrap;
+    }
+    .center {
+        justify-content: center;
     }
 </style>

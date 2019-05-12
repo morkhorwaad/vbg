@@ -22,6 +22,14 @@ app.use(function(err, req, res, next) {
 //
 app.get('/api', (req, res) => res.send('Hello World!'))
 
+app.get('/api/autocomplete', (req, res, next) => {
+    if(!req.query.search) { res.status(400).send('Need a search, dummy')}
+    edamam.autocompleteIngredientSearch(
+        req.query.search, 
+        r => res.json(r)
+    )
+})
+
 app.post('/api/getFoodIds', (req, res, next) => {
     if(!req.body.ingredients) { res.status(400).send('Need a valid ingredients object, dummy')}
     edamam.getParsedIngredientInfo(

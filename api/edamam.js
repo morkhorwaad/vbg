@@ -1,11 +1,14 @@
 const fetch = require('node-fetch')
 
-const foodDbEndpoint = "https://api.edamam.com/api/food-database/"
+const baseEndpoint = "https://api.edamam.com"
+
+const foodDbEndpoint = `${baseEndpoint}/api/food-database/`
 const parserEndpoint = foodDbEndpoint + "parser?categoryLabel=food&category=generic-foods&health=vegan"
 const nutrientsEndpoint = foodDbEndpoint + "nutrients"
-const nutritionEndpoint = "http://api.edamam.com/api/nutrition-data?"
+const nutritionEndpoint = `${baseEndpoint}/api/nutrition-data?`
+const autocompleteEndpoint = `${baseEndpoint}/auto-complete`
 
-const cupMeasureUri = "http://www.edamam.com/ontologies/edamam.owl#Measure_cup"
+const cupMeasureUri = `${baseEndpoint}/ontologies/edamam.owl#Measure_cup`
 
 const makeCredString = (id, key) => `app_id=${id}&app_key=${key}`
 const foodDbCreds = {
@@ -84,6 +87,15 @@ module.exports = {
         return Promise.all(gets)
             .then(cb)
             .catch(e => console.error("There was a network error: " + e))
+    }, 
+
+    autocompleteIngredientSearch(query, cb) {
+        //build the query
+        const queryUrl = `${autocompleteEndpoint}?q=${query}&limit=5&${foodDbAuthStr}`
+        return fetch(queryUrl)
+                .then(response => response.json())
+                .then(cb)
+                .catch(e => console.error("Something went wrong autocompleting", e))
     }
 }
 

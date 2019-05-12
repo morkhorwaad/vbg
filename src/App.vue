@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
+    <IngredientSearch/>
     <IngredientList 
       v-for="(item, index) in ingredientCategories"
       v-bind:name="item.name"
@@ -13,6 +13,7 @@
 
 <script>
 import IngredientList from "./components/IngredientList.vue"
+import IngredientSearch from "./components/IngredientSearch.vue"
 import Bowl from './components/Bowl.vue'
 import { INGREDIENT_CATEGORIES } from "../constants.js"
 import { mapGetters } from 'vuex'
@@ -20,6 +21,7 @@ import { mapGetters } from 'vuex'
 export default {
   name: "app",
   components: {
+    IngredientSearch,
     IngredientList, 
     Bowl
   }, 

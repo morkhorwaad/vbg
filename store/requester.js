@@ -2,7 +2,6 @@ const baseApiUrl = 'http://localhost:3000'
 
 export default {
     getFoodIds(ingredients, cb) {
-        debugger;
         fetch(`${baseApiUrl}/api/getFoodIds`, {
             method: 'POST', 
             headers: {
@@ -28,5 +27,12 @@ export default {
         .then(response => response.json())
         .then(cb)
         .catch(err => console.error(err))
+    },
+
+    autocomplete(query, cb) {
+        fetch(`${baseApiUrl}/api/autocomplete?search=${query}`)
+                .then(response => response.json())
+                .then(cb)
+                .catch(err => console.error(err))
     }
 }
