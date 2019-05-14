@@ -8,7 +8,7 @@ const nutrientsEndpoint = foodDbEndpoint + "nutrients"
 const nutritionEndpoint = `${baseEndpoint}/api/nutrition-data?`
 const autocompleteEndpoint = `${baseEndpoint}/auto-complete`
 
-const cupMeasureUri = `${baseEndpoint}/ontologies/edamam.owl#Measure_cup`
+const cupMeasureUri = "http://www.edamam.com/ontologies/edamam.owl#Measure_cup"
 
 const makeCredString = (id, key) => `app_id=${id}&app_key=${key}`
 const foodDbCreds = {
