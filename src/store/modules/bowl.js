@@ -1,5 +1,5 @@
-import { NUTRITION_FIELDS } from '../../constants.js'
-import { getNutrientQuantity } from '../../common.js'
+import { NUTRITION_FIELDS } from '../../../constants.js'
+import { getNutrientQuantity } from '../../../common.js'
 
 const state = {
   contents: []

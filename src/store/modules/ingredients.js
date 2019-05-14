@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import requester from '../requester'
-import { INGREDIENT_CATEGORIES, STARTING_INGREDIENTS } from '../../constants.js';
+import { INGREDIENT_CATEGORIES, STARTING_INGREDIENTS } from '../../../constants.js';
 
 const state = {
   labels: [],
