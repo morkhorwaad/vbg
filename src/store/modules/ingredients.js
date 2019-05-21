@@ -37,14 +37,16 @@ function getIngredientsInCategory(ingredients, category) {
 } 
 
 const actions = {
-  getInitialIngredients({commit, dispatch}) {
-      requester.getFoodIds(
-        STARTING_INGREDIENTS,
-        ingredients => {
-          commit('setInitialIngredients', ingredients)
-          dispatch('getNutrientData', ingredients)
-        }
-      )
+  getInitialIngredients: ({dispatch}) => dispatch('getIngredients', STARTING_INGREDIENTS),
+
+  getIngredients({commit, dispatch}, ingredients) {
+    requester.getFoodIds(
+      ingredients,
+      results => {
+        commit('addIngredients', results)
+        dispatch('getNutrientData', results)
+      }
+    )
   },
 
   getNutrientData({commit}, ingredients) {
@@ -56,8 +58,13 @@ const actions = {
 }
 
 const mutations = {
-  setInitialIngredients(state, payload) {
-    state.labels = payload
+  addIngredients(state, payload) {
+    payload.forEach(ingredient => {
+      const existingIng = state.labels.find(i => i.foodId == ingredient.foodId)
+      if(!existingIng) {
+        state.labels.push(ingredient)
+      }
+    })
   },
 
   addNutritionInfo(state, payload) {

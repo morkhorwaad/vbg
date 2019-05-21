@@ -93,7 +93,12 @@ module.exports = {
         //build the query
         const queryUrl = `${autocompleteEndpoint}?q=${query}&limit=5&${foodDbAuthStr}`
         return fetch(queryUrl)
-                .then(response => response.json())
+                .then(response => {
+                    if(response.ok) { return response.json()}
+                    // test data
+                    return ['avocado', 'pear', 'apple']
+                    //throw new Error(`Uh oh, bad status: ${response.status}`)
+                })
                 .then(cb)
                 .catch(e => console.error("Something went wrong autocompleting", e))
     }

@@ -12,7 +12,7 @@ export const INGREDIENT_CATEGORIES = [
 
 export const STARTING_INGREDIENTS = [
     // bases
-    { name: "brown rice", category: BASE_TAG },
+    //{ name: "brown rice", category: BASE_TAG },
     // { name: "quinoa", category: BASE_TAG },
     // { name: "couscous", category: BASE_TAG },
     
