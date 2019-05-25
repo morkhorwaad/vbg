@@ -1,6 +1,7 @@
 <template>
-    <div>
-        <input type="text" :value="currentSearch" @input="search" />
+    <div class="ingredient-search">
+        <label for="ingredientSearch">Search for some ingredients</label>
+        <input id="ingredientSearch" type="text" :value="currentSearch" @input="search" />
         <IngredientResult 
             v-for="(result, index) in searchResults" 
             v-bind:key="index"
@@ -46,6 +47,10 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="scss">
+    .ingredient-search {
+        display: flex;
+        flex-flow: column nowrap;
+        max-width: 250px;
+    }
 </style>

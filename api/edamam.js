@@ -91,14 +91,16 @@ module.exports = {
 
     autocompleteIngredientSearch(query, cb) {
         //build the query
-        const queryUrl = `${autocompleteEndpoint}?q=${query}&limit=5&${foodDbAuthStr}`
+        const queryUrl = `${autocompleteEndpoint}?q=${query}&limit=3&${foodDbAuthStr}`
         return fetch(queryUrl)
                 .then(response => {
-                    if(response.ok) { return response.json()}
+                    if(response.ok) { return response.json(); }
                     // test data
                     return ['avocado', 'pear', 'apple']
                     //throw new Error(`Uh oh, bad status: ${response.status}`)
                 })
+                // for some reason, limit doesn't seem to do anything? keep it short
+                .then(arr => arr.slice(0, 3))
                 .then(cb)
                 .catch(e => console.error("Something went wrong autocompleting", e))
     }

@@ -1,0 +1,15 @@
+@import "./variables.scss";
+
+html, body {
+    margin: 1rem;
+}
+
+main {
+    display: grid;
+    grid-template-columns: 1fr minmax(min-content, 250px);
+
+    @media screen and (max-width: $media-md) {
+        grid-template-columns: 1fr;
+    }
+}
+    

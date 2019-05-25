@@ -18,5 +18,8 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+    .ingredient-result {
+        background-color: #ccc;
+    }
 </style>

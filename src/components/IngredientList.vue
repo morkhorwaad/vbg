@@ -31,17 +31,20 @@ export default {
 }
 </script>
 
-<style>
-.ingredient-list-container {
-  margin-bottom: 5vh;
-}
-.ingredient-list {
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: center;
-}
-header {
-  grid-column: 1/-1;
-}
+<style lang="scss">
+  .ingredient-list-container {
+    margin-bottom: 5vh;
+  }
+  .ingredient-list {
+    display: flex;
+    flex-flow: row wrap;
+
+    > * {
+      margin-right: 10px;
+    }
+  }
+  header {
+    grid-column: 1/-1;
+  }
 </style>
 
