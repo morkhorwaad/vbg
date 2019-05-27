@@ -10,7 +10,15 @@ require('dotenv').config({
     path: 'development.env'
 })
 
-const edamam = require('./api/edamam')
+let mock = false
+const args = process.argv.slice(2)
+args.forEach(a => {
+    if(a == 'mock') {
+        mock = true;
+    }
+})
+
+const edamam = mock ? require('./api/mock') : require('./api/edamam')
 
 app.use(bodyParser.json())
 app.use(cors())
